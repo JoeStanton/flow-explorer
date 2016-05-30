@@ -2,15 +2,22 @@ require 'netaddr'
 require 'ruby-graphviz'
 # version account-id interface-id srcaddr dstaddr srcport dstport protocol packets bytes start end action log-status
 
+services = File.read("/etc/services").lines.select { |l| l[0] != "#" }.reduce({}) do |h, l|
+  _, pre_port, pre_description = l.split(" ")
+  port = pre_port.split("/")[0].to_i
+  puts port
+  description = pre_description.gsub("# ", "")
+  h[port] = description if port && description
+  h
+end
+
 logs = File.read(ARGV[0])
 internal = NetAddr::CIDR.create("172.16.0.0/16")
-
-first_packet = {}
 
 parsed = logs.lines
              .map { |l| l.split(" ") }
              .select { |l| l[3] != "-" && internal.contains?(l[3]) && l[4] != "-" && internal.contains?(l[4]) }
-             .select { |l| l[6].to_i < 1000 }
+             .select { |l| services[l[6].to_i] }
              .select { |l| l[12] == "ACCEPT" }
 
 from = parsed.map { |l| l[3] }.uniq
