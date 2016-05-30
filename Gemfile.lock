@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    aws (2.10.2)
+      http_connection
+      uuidtools
+      xml-simple
+    http_connection (1.4.4)
+    netaddr (1.5.1)
+    ruby-graphviz (1.2.2)
+    uuidtools (2.1.5)
+    xml-simple (1.1.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  aws
+  netaddr
+  ruby-graphviz
+
+BUNDLED WITH
+   1.11.2
